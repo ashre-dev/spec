@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ASHRE Vendor Manifest",
+  "description": "Schema for registering a vendor in the ASHRE registry",
+  "version": "0.1.0",
+  "type": "object",
+  "required": [
+    "vendor_id",
+    "name",
+    "category",
+    "mcp_endpoint",
+    "payment",
+    "schema_version"
+  ],
+  "properties": {
+    "vendor_id": {
+      "type": "string",
+      "description": "Unique vendor identifier, lowercase, hyphenated",
+      "example": "helsinki-maker-store"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable vendor name",
+      "example": "Helsinki Maker Store"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of what the vendor sells"
+    },
+    "category": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Product categories",
+      "example": ["clothing", "merchandise"]
+    },
+    "mcp_endpoint": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the vendor's MCP server"
+    },
+    "payment": {
+      "type": "object",
+      "required": ["protocol", "address", "currency", "network", "price_per_query"],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": ["x402"],
+          "description": "Payment protocol"
+        },
+        "address": {
+          "type": "string",
+          "description": "Vendor wallet address"
+        },
+        "currency": {
+          "type": "string",
+          "enum": ["USDC"],
+          "description": "Payment currency"
+        },
+        "network": {
+          "type": "string",
+          "enum": ["base", "base-sepolia"],
+          "description": "Blockchain network"
+        },
+        "price_per_query": {
+          "type": "string",
+          "description": "Cost per catalog query in USDC",
+          "example": "0.05"
+        }
+      }
+    },
+    "ships_to": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "ISO 3166-1 alpha-2 country codes",
+      "example": ["FI", "EU"]
+    },
+    "verified": {
+      "type": "boolean",
+      "description": "Whether vendor has been verified by ASHRE",
+      "default": false
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "ASHRE spec version this manifest targets",
+      "example": "0.1.0"
+    }
+  }
+}
