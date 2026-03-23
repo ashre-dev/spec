@@ -18,3 +18,7 @@ agent that can make HTTP calls.
 ## Status
 
 v0.1 — draft spec. Feedback welcome via issues.
+
+## How it works
+
+User → Agent → ASHRE Registry → Vendor MCP Servers → HTTP 402 → x402 Payment → Purchase Confirmed
