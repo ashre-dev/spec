@@ -1,0 +1,17 @@
+{
+  "vendor_id": "helsinki-maker-store",
+  "name": "Helsinki Maker Store",
+  "description": "Independent store selling maker culture merchandise, t-shirts, and accessories shipped across Europe.",
+  "category": ["clothing", "merchandise", "accessories"],
+  "mcp_endpoint": "https://api.helsinkimakerstore.fi/mcp",
+  "payment": {
+    "protocol": "x402",
+    "address": "0xABCD1234ABCD1234ABCD1234ABCD1234ABCD1234",
+    "currency": "USDC",
+    "network": "base",
+    "price_per_query": "0.05"
+  },
+  "ships_to": ["FI", "SE", "NO", "DK", "DE", "NL", "EE", "LV", "LT"],
+  "verified": false,
+  "schema_version": "0.1.0"
+}
