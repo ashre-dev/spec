@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 
 from .models import VendorManifest, VendorRegistration, HealthStatus, DiscoverResponse
 from .store import VendorStore, registry as _default_registry
@@ -15,6 +16,13 @@ def create_registry_app(store: VendorStore | None = None) -> FastAPI:
     _store = store or _default_registry
 
     app = FastAPI(title="ASHRE Registry", version="0.1.0")
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["https://ashre.dev", "https://www.ashre.dev"],
+        allow_methods=["GET", "POST"],
+        allow_headers=["*"],
+    )
 
     @app.post("/vendors/register", response_model=VendorRegistration, status_code=201)
     def register_vendor(manifest: VendorManifest):

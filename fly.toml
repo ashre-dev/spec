@@ -1,0 +1,24 @@
+# ASHRE Registry — Fly.io config
+# Deploy with: fly deploy --dockerfile Dockerfile.registry
+
+app = "ashre-registry"
+primary_region = "ams"  # Amsterdam — close to target vendors (FI, DE)
+
+[build]
+  dockerfile = "Dockerfile.registry"
+
+[http_service]
+  internal_port = 8010
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 100
+    soft_limit = 80
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
