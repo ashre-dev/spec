@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — ASHRE</title>
+  <meta name="description" content="Get in touch with ASHRE." />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <script src="theme.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container nav-inner">
+    <a class="logo" href="index.html">ASH<span>RE</span></a>
+    <div class="nav-links">
+      <a href="index.html#problem">Problem</a>
+      <a href="index.html#flow">How It Works</a>
+      <a href="index.html#who">Who It's For</a>
+      <a href="index.html#approval">Trust</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☀️</button>
+      <a href="contact.html" class="btn-pill">Get Listed</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="contact-hero">
+  <div class="container">
+    <div class="eyebrow">Get In Touch</div>
+    <h1>Let's talk.</h1>
+    <p>Vendor, developer, or enterprise buyer — tell us who you are and what you need.</p>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="container contact-body">
+
+  <!-- Left -->
+  <div class="info-block">
+    <h3>We'll respond within one business day.</h3>
+    <p>No sales calls. No spam. Just a real conversation.</p>
+
+    <div class="info-item">
+      <div class="info-item-icon">📬</div>
+      <div>
+        <h4>Email</h4>
+        <p><a href="mailto:chanukya.pekala@gmail.com">chanukya.pekala@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-item-icon">🌐</div>
+      <div>
+        <h4>Open Specification</h4>
+        <p><a href="https://github.com/ashre-dev" target="_blank" rel="noopener">github.com/ashre-dev</a></p>
+      </div>
+    </div>
+
+    <div class="roles-box">
+      <h4>Common reasons to reach out</h4>
+      <ul>
+        <li>I want to list my business on ASHRE</li>
+        <li>I'm building an AI agent and want to integrate</li>
+        <li>I need AI-driven procurement with human approval</li>
+        <li>I'm curious about the open specification</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Right: form -->
+  <div>
+    <div class="form-card">
+      <!--
+        Setup: sign up at formspree.io, create a form,
+        then replace YOUR_FORM_ID below with your endpoint ID.
+      -->
+      <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+
+        <div class="form-row">
+          <div class="fg">
+            <label for="name">Full Name <span style="color:var(--red)">*</span></label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+          </div>
+          <div class="fg">
+            <label for="email">Email <span style="color:var(--red)">*</span></label>
+            <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="fg">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" placeholder="Acme Corp" />
+          </div>
+          <div class="fg">
+            <label for="role">I am a… <span style="color:var(--red)">*</span></label>
+            <select id="role" name="role" required>
+              <option value="" disabled selected>Select your role</option>
+              <option value="vendor">Vendor — I want to get listed</option>
+              <option value="developer">AI Developer — I want to integrate</option>
+              <option value="enterprise">Enterprise Buyer — I need procurement tools</option>
+              <option value="other">Other / Just curious</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label for="message">Message <span style="color:var(--red)">*</span></label>
+          <textarea id="message" name="message" placeholder="What are you building, selling, or trying to solve?" required></textarea>
+        </div>
+
+        <!-- Honeypot -->
+        <input type="text" name="_gotcha" style="display:none" />
+        <input type="hidden" name="_subject" value="New ASHRE enquiry" />
+
+        <button type="submit" class="btn-solid form-submit">Send Message</button>
+        <p class="form-note">We respond within one business day. No spam, ever.</p>
+      </form>
+
+      <div class="form-success" id="form-success">
+        <div class="big">✅</div>
+        <h3>Message received</h3>
+        <p>We'll be in touch within one business day.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container foot">
+    <span class="foot-logo">ASHRE</span>
+    <div class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#flow">How It Works</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <span class="foot-copy">© 2026 ASHRE · Open specification</span>
+  </div>
+</footer>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const success = document.getElementById('form-success');
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST', body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        success.style.display = 'block';
+      } else {
+        alert('Something went wrong. Email us at chanukya.pekala@gmail.com');
+      }
+    } catch {
+      alert('Something went wrong. Email us at chanukya.pekala@gmail.com');
+    }
+  });
+</script>
+
+</body>
+</html>

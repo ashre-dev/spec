@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASHRE — Agent Shopping Registry</title>
+  <meta name="description" content="The open discovery and trust layer for AI-driven commerce." />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script src="theme.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container nav-inner">
+    <a class="logo" href="index.html">ASH<span>RE</span></a>
+    <div class="nav-links">
+      <a href="#problem">Problem</a>
+      <a href="#flow">How It Works</a>
+      <a href="#who">Who It's For</a>
+      <a href="#approval">Trust</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☀️</button>
+      <a href="contact.html" class="btn-pill">Get Listed</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+<h1 class="md-h1">Where AI agents<br/>go to <em>shop</em>.</h1>
+    <p class="hero-sub">
+      A neutral registry connecting AI buyers to verified vendors.
+      No commissions. No lock-in. Humans stay in control.
+    </p>
+    <div class="ctas">
+      <a href="contact.html" class="btn-solid">List Your Business</a>
+      <a href="#flow" class="btn-ghost">See How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAR -->
+<div class="container" style="padding-bottom: 80px;">
+  <div class="stat-bar">
+    <div class="stat">
+      <span class="stat-num">0%</span>
+      <span class="stat-label">Commission on sales</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">Any</span>
+      <span class="stat-label">AI agent, any platform</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">✓</span>
+      <span class="stat-label">Human approval on every transaction</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="eyebrow">the-problem</div>
+    <h2 class="md-h">AI agents are shopping blind.</h2>
+    <hr class="md-hr" style="margin: 20px 0 28px;" />
+    <p class="md-p" style="margin-bottom: 32px;">
+      No directory. No trust layer. Only the giants get the business.
+    </p>
+
+    <div class="code-block">
+      <div><span class="c-dim"># Without ASHRE</span></div>
+      <div>&nbsp;</div>
+      <div><span class="c-key">agent.query</span>  <span class="c-dim">→</span>  <span class="c-val">"who sells bulk stationery?"</span></div>
+      <div><span class="c-key">result</span>       <span class="c-dim">→</span>  <span class="c-val">["amazon.com"]</span>  <span class="c-dim"># only hardcoded options</span></div>
+      <div><span class="c-key">vendors_found</span> <span class="c-dim">→</span>  <span class="c-val">1</span>  <span class="c-dim"># 99% of vendors invisible</span></div>
+      <div><span class="c-key">commission</span>    <span class="c-dim">→</span>  <span class="c-val">"15%"</span>  <span class="c-dim"># paid to platform, not vendor</span></div>
+      <div><span class="c-key">trust_signal</span>  <span class="c-dim">→</span>  <span class="c-val">null</span>  <span class="c-dim"># agent cannot verify vendors</span></div>
+      <div>&nbsp;</div>
+      <div><span class="c-dim"># With ASHRE</span></div>
+      <div>&nbsp;</div>
+      <div><span class="c-key">agent.query</span>  <span class="c-dim">→</span>  <span class="c-val">"who sells bulk stationery?"</span></div>
+      <div><span class="c-key">result</span>       <span class="c-dim">→</span>  <span class="c-val">["vendor-a", "vendor-b", "vendor-c", ...]</span></div>
+      <div><span class="c-key">vendors_found</span> <span class="c-dim">→</span>  <span class="c-val">12</span>  <span class="c-dim"># verified, global</span></div>
+      <div><span class="c-key">commission</span>    <span class="c-dim">→</span>  <span class="c-val">"0%"</span>  <span class="c-dim"># direct to vendor</span></div>
+      <div><span class="c-key">trust_signal</span>  <span class="c-dim">→</span>  <span class="c-green">"verified"</span>  <span class="c-dim"># ASHRE-verified badge</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="flow" style="padding: 80px 0;">
+  <div class="container">
+    <div class="eyebrow">how-it-works</div>
+    <h2 class="md-h">Six steps. Zero middlemen.</h2>
+    <hr class="md-hr" style="margin: 20px 0 28px;" />
+    <p class="md-p" style="margin-bottom: 0;">
+      ASHRE handles discovery and trust. Money flows directly between buyer and vendor.
+    </p>
+
+    <div class="flow-list">
+      <div class="flow-item">
+        <div class="flow-num-col">01</div>
+        <div class="flow-body">
+          <h3>Vendor lists on ASHRE</h3>
+          <p>Register your business, products, and pricing. ASHRE verifies and publishes you to the registry.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num-col">02</div>
+        <div class="flow-body">
+          <h3>AI agent queries ASHRE</h3>
+          <p>The agent asks: <span class="inline-code">"who sells X, ships to Y, under Z?"</span> — structured, machine-readable.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num-col">03</div>
+        <div class="flow-body">
+          <h3>Registry returns verified vendors</h3>
+          <p>A ranked list of verified vendors — prices, delivery windows, trust scores.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num-col">04</div>
+        <div class="flow-body">
+          <h3>Agent contacts all vendors in parallel</h3>
+          <p>Every matched vendor queried simultaneously. Best deal wins. No bias, no sponsored rankings.</p>
+        </div>
+      </div>
+      <div class="flow-item green-item">
+        <div class="flow-num-col">05</div>
+        <div class="flow-body">
+          <h3>Human reviews and approves</h3>
+          <p>The AI presents its recommendation. A human sees the summary and gives the green signal.</p>
+          <span class="human-badge">✅ human_approval = required</span>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num-col">06</div>
+        <div class="flow-body">
+          <h3>Payment goes direct</h3>
+          <p>Money moves straight from buyer to vendor. ASHRE is not in the transaction.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section id="who" style="padding: 80px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="eyebrow">who-its-for</div>
+    <h2 class="md-h">Three sides. One registry.</h2>
+    <hr class="md-hr" style="margin: 20px 0 28px;" />
+    <div class="who-cards">
+      <div class="who-card">
+        <span class="who-icon">🏪</span>
+        <h3>Vendors</h3>
+        <p>Sell products or services. Get found by AI buyers without Amazon's commission.</p>
+        <ul class="md-list">
+          <li>Discoverable by any AI agent worldwide</li>
+          <li>Flat listing fee — zero per-sale cut</li>
+          <li>Direct buyer relationship</li>
+          <li>Equal footing with large platforms</li>
+        </ul>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">🤖</span>
+        <h3>AI Developers</h3>
+        <p>Building agents or assistants. One API to access a global vendor network.</p>
+        <ul class="md-list">
+          <li>Single query — all verified vendors</li>
+          <li>No hardcoded shop URLs</li>
+          <li>Trust signals built in</li>
+          <li>Free tier for indie projects</li>
+        </ul>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">🏢</span>
+        <h3>Enterprise Buyers</h3>
+        <p>Let AI handle procurement. You approve every transaction before anything is spent.</p>
+        <ul class="md-list">
+          <li>AI finds the best vendor automatically</li>
+          <li>Human approves every payment</li>
+          <li>Compliant vendor networks</li>
+          <li>Full audit trail</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROVAL -->
+<section id="approval" style="padding: 80px 0;">
+  <div class="container">
+    <div class="eyebrow">human-oversight</div>
+    <h2 class="md-h">AI never acts alone.</h2>
+    <hr class="md-hr" style="margin: 20px 0 28px;" />
+
+    <div class="approval-grid">
+      <div>
+        <blockquote class="md-quote">
+          "The AI finds the best deal.<br/>You give the green signal."
+        </blockquote>
+        <p class="md-p">
+          Every ASHRE-powered transaction has a mandatory human review step.
+          The agent presents its recommendation — vendor, price, terms — and waits.
+          Nothing is purchased until you approve.
+        </p>
+      </div>
+      <div class="approval-flow">
+        <div class="af-row">
+          <span class="af-icon">01</span>
+          <div>
+            <h4>AI searches ASHRE</h4>
+            <p>Queries registry for matching verified vendors</p>
+          </div>
+        </div>
+        <div class="af-connector"></div>
+        <div class="af-row">
+          <span class="af-icon">02</span>
+          <div>
+            <h4>AI compares options</h4>
+            <p>Evaluates price, delivery, and trust score</p>
+          </div>
+        </div>
+        <div class="af-connector"></div>
+        <div class="af-row">
+          <span class="af-icon">03</span>
+          <div>
+            <h4>Human receives summary</h4>
+            <p>Vendor, price, terms, and reasoning — clearly laid out</p>
+          </div>
+        </div>
+        <div class="af-connector"></div>
+        <div class="af-row active">
+          <span class="af-icon">✓</span>
+          <div>
+            <h4>Human approves → payment proceeds</h4>
+            <p>Nothing is spent until you say yes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="container">
+    <h2>Ready to be found<br/>by AI buyers?</h2>
+    <p>Join the registry. Keep 100% of every sale.</p>
+    <div class="ctas" style="justify-content:center;">
+      <a href="contact.html" class="btn-solid">Get Listed</a>
+      <a href="contact.html" class="btn-ghost">Talk to Us</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container foot">
+    <span class="foot-logo">ASHRE</span>
+    <div class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="#flow">How It Works</a>
+      <a href="#who">Who It's For</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <span class="foot-copy">© 2026 ASHRE · open specification</span>
+  </div>
+</footer>
+
+</body>
+</html>
