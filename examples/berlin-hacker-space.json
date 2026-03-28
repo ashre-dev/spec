@@ -1,0 +1,17 @@
+{
+  "vendor_id": "berlin-hacker-space",
+  "name": "Berlin Hacker Space",
+  "description": "Electronics, maker tools, and components shipped across Central Europe.",
+  "category": ["electronics", "tools", "components", "clothing"],
+  "mcp_endpoint": "https://api.berlinhackerspace.de/mcp",
+  "payment": {
+    "protocol": "x402",
+    "address": "0x1234ABCD1234ABCD1234ABCD1234ABCD1234ABCD",
+    "currency": "USDC",
+    "network": "base",
+    "price_per_query": "0.03"
+  },
+  "ships_to": ["DE", "AT", "CH", "NL", "BE", "FR", "PL", "CZ"],
+  "verified": false,
+  "schema_version": "0.1.0"
+}

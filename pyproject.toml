@@ -1,0 +1,36 @@
+[project]
+name = "ashre"
+version = "0.1.0"
+description = "Agent Shopping Registry — open spec for agent-native commerce discovery"
+authors = [
+    { name = "Chanukya Pekala", email = "chanukya.pekala@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic>=0.86.0",
+    "fastapi>=0.135.2",
+    "httpx>=0.28.1",
+    "uvicorn>=0.42.0",
+    "web3>=7.0.0",
+]
+
+[project.scripts]
+ashre-vendor = "src.vendor_server:main"
+ashre-agent = "src.agent:main"
+ashre-registry = "src.registry:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src", "sdk"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+]

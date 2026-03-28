@@ -1,0 +1,36 @@
+services:
+
+  helsinki:
+    build: .
+    ports:
+      - "8001:8000"
+    environment:
+      VENDOR_ID: helsinki-maker-store
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  berlin:
+    build: .
+    ports:
+      - "8002:8000"
+    environment:
+      VENDOR_ID: berlin-hacker-space
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  registry:
+    build: .
+    ports:
+      - "8010:8010"
+    command: ["python", "-m", "uvicorn", "src.registry.main:app", "--host", "0.0.0.0", "--port", "8010"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8010/docs')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
