@@ -46,11 +46,26 @@ class CatalogResponse(BaseModel):
     products: list[Product]
 
 
+class ReserveRequest(BaseModel):
+    product_id: str
+    quantity: int = 1
+
+
+class ReserveResponse(BaseModel):
+    reservation_id: str
+    product_id: str
+    quantity: int
+    held_until: str  # ISO-8601 timestamp
+    status: str = "held"
+
+
 class BuyRequest(BaseModel):
     product_id: str
     quantity: int = 1
     shipping_address: str
     payer_address: str
+    reservation_id: Optional[str] = None
+    callback_url: Optional[str] = None
 
 
 class BuyResponse(BaseModel):
@@ -61,3 +76,4 @@ class BuyResponse(BaseModel):
     status: str = "confirmed"
     estimated_delivery: str
     message: Optional[str] = None
+    callback_url: Optional[str] = None

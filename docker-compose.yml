@@ -24,6 +24,18 @@ services:
       timeout: 5s
       retries: 3
 
+  chennai:
+    build: .
+    ports:
+      - "8003:8000"
+    environment:
+      VENDOR_ID: chennai-threads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   registry:
     build: .
     ports:
