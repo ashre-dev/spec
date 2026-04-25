@@ -1,0 +1,17 @@
+{
+  "vendor_id": "chennai-threads",
+  "name": "Chennai Threads",
+  "description": "Apparel and accessories from Chennai — handloom cotton, block prints, and Kanchipuram silk blends shipped across South and Southeast Asia.",
+  "category": ["clothing", "accessories"],
+  "mcp_endpoint": "https://api.chennaithreads.in/mcp",
+  "payment": {
+    "protocol": "x402",
+    "address": "0xCHENNAI0000THREADS0000WALLET000000000001",
+    "currency": "USDC",
+    "network": "base",
+    "price_per_query": "0.02"
+  },
+  "ships_to": ["IN", "LK", "SG", "MY", "AE"],
+  "verified": false,
+  "schema_version": "0.1.0"
+}

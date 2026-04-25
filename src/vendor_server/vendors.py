@@ -6,6 +6,7 @@ from .models import Product
 
 _HELSINKI_SHIPS_TO = ["FI", "SE", "NO", "DK", "DE", "NL", "EE", "LV", "LT"]
 _BERLIN_SHIPS_TO = ["DE", "AT", "CH", "NL", "BE", "FR", "PL", "CZ"]
+_CHENNAI_SHIPS_TO = ["IN", "LK", "SG", "MY", "AE"]
 
 VENDOR_CATALOG: dict[str, dict] = {
     "helsinki-maker-store": {
@@ -128,6 +129,56 @@ VENDOR_CATALOG: dict[str, dict] = {
                 price_usdc="16.00",
                 category="clothing",
                 ships_to=_BERLIN_SHIPS_TO,
+            ),
+        ],
+    },
+    "chennai-threads": {
+        "vendor_id": "chennai-threads",
+        "name": "Chennai Threads",
+        "wallet_address": "0xCHENNAI0000THREADS0000WALLET000000000001",
+        "price_per_query": "0.02",
+        "ships_to": _CHENNAI_SHIPS_TO,
+        "products": [
+            Product(
+                id="ct-tee-blue-001",
+                name="Blue Cotton Tee",
+                description="Soft 100% Madras cotton crew-neck t-shirt in sky blue. Sizes S–XXL.",
+                price_usdc="25.00",
+                category="clothing",
+                ships_to=_CHENNAI_SHIPS_TO,
+            ),
+            Product(
+                id="ct-kurta-001",
+                name="Hand-Block Printed Kurta",
+                description="Lightweight cotton kurta with traditional block-print pattern. Unisex.",
+                price_usdc="35.00",
+                category="clothing",
+                ships_to=_CHENNAI_SHIPS_TO,
+            ),
+            Product(
+                id="ct-polo-001",
+                name="Organic Polo Shirt",
+                description="GOTS-certified organic cotton polo in charcoal grey. Slim fit.",
+                price_usdc="30.00",
+                category="clothing",
+                ships_to=_CHENNAI_SHIPS_TO,
+            ),
+            Product(
+                id="ct-scarf-001",
+                name="Silk-Cotton Scarf",
+                description="Handwoven Kanchipuram silk-cotton blend scarf, 180cm × 50cm.",
+                price_usdc="40.00",
+                category="accessories",
+                ships_to=_CHENNAI_SHIPS_TO,
+            ),
+            Product(
+                id="ct-tote-001",
+                name="Kalamkari Tote Bag",
+                description="Canvas tote with hand-painted Kalamkari art. Reinforced straps.",
+                price_usdc="20.00",
+                category="accessories",
+                ships_to=_CHENNAI_SHIPS_TO,
+                in_stock=False,
             ),
         ],
     },
