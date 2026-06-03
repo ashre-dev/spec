@@ -5,11 +5,11 @@ from pydantic import BaseModel, field_validator
 
 
 class PaymentInfo(BaseModel):
-    protocol: str = "x402"
-    address: str
-    currency: str = "USDC"
-    network: str
+    protocol: str = "stripe"
+    currency: str = "USD"
     price_per_query: str
+    stripe_account_id: str | None = None
+    upi_id: str | None = None
 
 
 class VendorManifest(BaseModel):

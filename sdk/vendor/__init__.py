@@ -36,7 +36,7 @@ class Product:
     id: str
     name: str
     description: str
-    price_usdc: str
+    price: str
     category: str
     in_stock: bool
     ships_to: list[str]
@@ -79,7 +79,7 @@ class VendorApp:
                 id=p.id,
                 name=p.name,
                 description=p.description,
-                price_usdc=p.price_usdc,
+                price=p.price,
                 category=p.category,
                 in_stock=p.in_stock,
                 ships_to=p.ships_to,
@@ -97,7 +97,7 @@ class VendorApp:
             id=p.id,
             name=p.name,
             description=p.description,
-            price_usdc=p.price_usdc,
+            price=p.price,
             category=p.category,
             in_stock=p.in_stock,
             ships_to=p.ships_to,

@@ -18,6 +18,7 @@
     <div class="nav-links">
       <a href="#problem">Problem</a>
       <a href="#flow">How It Works</a>
+      <a href="#vendors">Vendors</a>
       <a href="#who">Who It's For</a>
       <a href="#approval">Trust</a>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☀️</button>
@@ -49,8 +50,8 @@
       <span class="stat-label">Commission on sales</span>
     </div>
     <div class="stat">
-      <span class="stat-num">Any</span>
-      <span class="stat-label">AI agent, any platform</span>
+      <span class="stat-num">3</span>
+      <span class="stat-label">Vendors live on the registry</span>
     </div>
     <div class="stat">
       <span class="stat-num">✓</span>
@@ -84,6 +85,8 @@
       <div><span class="c-key">result</span>       <span class="c-dim">→</span>  <span class="c-val">["vendor-a", "vendor-b", "vendor-c", ...]</span></div>
       <div><span class="c-key">vendors_found</span> <span class="c-dim">→</span>  <span class="c-val">12</span>  <span class="c-dim"># verified, global</span></div>
       <div><span class="c-key">commission</span>    <span class="c-dim">→</span>  <span class="c-val">"0%"</span>  <span class="c-dim"># direct to vendor</span></div>
+      <div><span class="c-key">reserve</span>      <span class="c-dim">→</span>  <span class="c-green">"held"</span>  <span class="c-dim"># inventory locked before payment</span></div>
+      <div><span class="c-key">callback</span>     <span class="c-dim">→</span>  <span class="c-green">"confirmed"</span>  <span class="c-dim"># vendor pushes order status</span></div>
       <div><span class="c-key">trust_signal</span>  <span class="c-dim">→</span>  <span class="c-green">"verified"</span>  <span class="c-dim"># ASHRE-verified badge</span></div>
     </div>
   </div>
@@ -93,7 +96,7 @@
 <section id="flow" style="padding: 80px 0;">
   <div class="container">
     <div class="eyebrow">how-it-works</div>
-    <h2 class="md-h">Six steps. Zero middlemen.</h2>
+    <h2 class="md-h">Eight steps. Zero middlemen.</h2>
     <hr class="md-hr" style="margin: 20px 0 28px;" />
     <p class="md-p" style="margin-bottom: 0;">
       ASHRE handles discovery and trust. Money flows directly between buyer and vendor.
@@ -124,12 +127,19 @@
       <div class="flow-item">
         <div class="flow-num-col">04</div>
         <div class="flow-body">
-          <h3>Agent contacts all vendors in parallel</h3>
+          <h3>Agent contacts vendors in parallel</h3>
           <p>Every matched vendor queried simultaneously. Best deal wins. No bias, no sponsored rankings.</p>
         </div>
       </div>
-      <div class="flow-item green-item">
+      <div class="flow-item">
         <div class="flow-num-col">05</div>
+        <div class="flow-body">
+          <h3>Agent reserves inventory</h3>
+          <p>Before payment, the agent holds the item via <span class="inline-code">POST /reserve</span>. 5-minute TTL — no overselling.</p>
+        </div>
+      </div>
+      <div class="flow-item green-item">
+        <div class="flow-num-col">06</div>
         <div class="flow-body">
           <h3>Human reviews and approves</h3>
           <p>The AI presents its recommendation. A human sees the summary and gives the green signal.</p>
@@ -137,10 +147,17 @@
         </div>
       </div>
       <div class="flow-item">
-        <div class="flow-num-col">06</div>
+        <div class="flow-num-col">07</div>
         <div class="flow-body">
           <h3>Payment goes direct</h3>
-          <p>Money moves straight from buyer to vendor. ASHRE is not in the transaction.</p>
+          <p>Money moves straight from buyer to vendor via standard payment rails (Stripe, UPI, bank transfer). ASHRE is not in the transaction.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num-col">08</div>
+        <div class="flow-body">
+          <h3>Vendor confirms via callback</h3>
+          <p>The vendor pushes order status directly to the agent — no polling. The agent relays confirmation to the human.</p>
         </div>
       </div>
     </div>
@@ -185,6 +202,50 @@
           <li>Human approves every payment</li>
           <li>Compliant vendor networks</li>
           <li>Full audit trail</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VENDORS -->
+<section id="vendors" style="padding: 80px 0;">
+  <div class="container">
+    <div class="eyebrow">live-registry</div>
+    <h2 class="md-h">Vendors on ASHRE today.</h2>
+    <hr class="md-hr" style="margin: 20px 0 28px;" />
+    <p class="md-p" style="margin-bottom: 32px;">
+      Real vendors, live on the registry. Discoverable by any AI agent right now.
+    </p>
+    <div class="who-cards">
+      <div class="who-card">
+        <span class="who-icon">🇫🇮</span>
+        <h3>Helsinki Maker Store</h3>
+        <p>Maker culture merch — tees, hoodies, enamel pins, and tote bags shipped across the Nordics and Europe.</p>
+        <ul class="md-list">
+          <li>Clothing, merchandise, accessories</li>
+          <li>Ships to FI, SE, NO, DK, DE, NL + Baltics</li>
+          <li>6 products listed</li>
+        </ul>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">🇩🇪</span>
+        <h3>Berlin Hacker Space</h3>
+        <p>Electronics, tools, and components for makers — from Raspberry Pi kits to soldering stations.</p>
+        <ul class="md-list">
+          <li>Electronics, tools, components, clothing</li>
+          <li>Ships to DE, AT, CH, NL, BE, FR, PL, CZ</li>
+          <li>7 products listed</li>
+        </ul>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">🇮🇳</span>
+        <h3>Chennai Threads</h3>
+        <p>Handloom cotton, block prints, and Kanchipuram silk blends — apparel and accessories from South India.</p>
+        <ul class="md-list">
+          <li>Clothing, accessories</li>
+          <li>Ships to IN, LK, SG, MY, AE</li>
+          <li>5 products listed</li>
         </ul>
       </div>
     </div>
@@ -265,6 +326,7 @@
     <div class="foot-links">
       <a href="index.html">Home</a>
       <a href="#flow">How It Works</a>
+      <a href="#vendors">Vendors</a>
       <a href="#who">Who It's For</a>
       <a href="contact.html">Contact</a>
     </div>

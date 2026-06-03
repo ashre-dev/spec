@@ -51,7 +51,6 @@ class VendorInfo:
     mcp_endpoint: str
     ships_to: list[str]
     verified: bool
-    payment_address: str
     price_per_query: str
 
 
@@ -155,7 +154,6 @@ class RegistryClient:
                     mcp_endpoint=m["mcp_endpoint"],
                     ships_to=m.get("ships_to", []),
                     verified=m.get("verified", False),
-                    payment_address=m["payment"]["address"],
                     price_per_query=m["payment"]["price_per_query"],
                 )
             )
@@ -186,24 +184,24 @@ class AshreAgent:
     anthropic_api_key:
         Anthropic API key.  If *None*, the ``ANTHROPIC_API_KEY`` env var is
         used automatically.
-    payer_address:
-        On-chain wallet address used as the ``payer_address`` in x402 payment
-        requests.  Defaults to the built-in demo address.
+    payer_id:
+        Identifier for the agent/buyer in payment requests.
+        Defaults to the built-in demo ID.
     """
 
-    _DEFAULT_PAYER = "0xAgentWallet0000000000000000000000000000"
+    _DEFAULT_PAYER = "ashre-agent-default"
 
     def __init__(
         self,
         anthropic_api_key: str | None = None,
-        payer_address: str = _DEFAULT_PAYER,
+        payer_id: str = _DEFAULT_PAYER,
     ) -> None:
         import anthropic
 
         self._client = anthropic.Anthropic(
             **({"api_key": anthropic_api_key} if anthropic_api_key else {})
         )
-        self._payer_address = payer_address
+        self._payer_id = payer_id
 
     # ------------------------------------------------------------------
     # Single-vendor shopping

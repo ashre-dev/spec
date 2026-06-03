@@ -3,7 +3,7 @@ ASHRE Buying Agent
 
 Uses Claude Opus 4.6 with tool use to:
   1. Query a vendor catalog (handles HTTP 402 automatically)
-  2. Pay via mock x402
+  2. Pay via standard payment rails
   3. Reason over the catalog and pick the best matching product
   4. Execute the purchase
 """
@@ -13,7 +13,7 @@ import httpx
 
 from .tools import TOOL_SCHEMAS, dispatch_tool
 
-AGENT_WALLET = "0xAgentWallet0000000000000000000000000000"
+AGENT_ID = "ashre-agent-default"
 
 SYSTEM_PROMPT = f"""\
 You are an autonomous AI shopping agent operating on the ASHRE protocol.
@@ -23,22 +23,21 @@ Given a shopping request and a vendor URL, complete the full purchase workflow:
 
 1. **get_catalog** — fetch the catalog (no token on first call)
 2. If you receive a 402 response, **pay_vendor** using:
-   - recipient_address: the `address` from the 402 `accepts[0]` field
    - amount: the `price_per_query` from the 402 `accepts[0]` field
-   - payer_address: "{AGENT_WALLET}"
-   (The tool handles the USDC transaction internally — do not generate tx_hash)
+   - payer_id: "{AGENT_ID}"
+   (The tool handles the payment internally)
 3. **get_catalog** again — now pass the token from pay_vendor
 4. Browse the catalog, pick the product that best matches the request
    - Prefer in-stock items
    - Match category, name, and description to the user's intent
 5. **buy_product** — complete the purchase:
    - Use the token from step 2
-   - payer_address: "{AGENT_WALLET}"
+   - payer_id: "{AGENT_ID}"
    - shipping_address: use "123 Agent Street, Helsinki, FI" unless the user specified one
 
 ## Output
 After completing the purchase, summarise what you bought, the order ID, quantity,
-total cost in USDC, and estimated delivery. Be concise.
+total cost, and estimated delivery. Be concise.
 """
 
 
