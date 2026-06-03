@@ -7,7 +7,6 @@ directly (httpx.ASGITransport) without needing a running server.
 """
 
 import json
-import os
 import uuid
 import httpx
 
@@ -41,28 +40,24 @@ TOOL_SCHEMAS = [
         "name": "pay_vendor",
         "description": (
             "Pay the vendor to unlock the catalog. Call this after get_catalog returns a 402. "
-            "The tool handles the transaction internally — in production it sends real USDC on "
-            "Base Sepolia; in dev/test it uses a mock tx. "
-            "Pass recipient_address and amount from the 402 accepts[0] fields."
+            "The tool handles the payment internally — in production it uses Stripe; "
+            "in dev/test it uses a mock payment. "
+            "Pass amount from the 402 accepts[0] fields."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
                 "vendor_url": {"type": "string", "description": "Base URL of the vendor server"},
-                "recipient_address": {
-                    "type": "string",
-                    "description": "Vendor wallet address from the 402 challenge (accepts[0].address)",
-                },
                 "amount": {
                     "type": "string",
-                    "description": "USDC amount to pay, from the 402 price_per_query field",
+                    "description": "Amount to pay, from the 402 price_per_query field",
                 },
-                "payer_address": {
+                "payer_id": {
                     "type": "string",
-                    "description": "Agent wallet address",
+                    "description": "Agent or buyer identifier",
                 },
             },
-            "required": ["vendor_url", "recipient_address", "amount", "payer_address"],
+            "required": ["vendor_url", "amount", "payer_id"],
         },
     },
     {
@@ -85,7 +80,7 @@ TOOL_SCHEMAS = [
                     "type": "string",
                     "description": "Full shipping address",
                 },
-                "payer_address": {"type": "string", "description": "Agent wallet address"},
+                "payer_id": {"type": "string", "description": "Agent or buyer identifier"},
                 "token": {"type": "string", "description": "Bearer token from pay_vendor"},
             },
             "required": [
@@ -93,7 +88,7 @@ TOOL_SCHEMAS = [
                 "product_id",
                 "quantity",
                 "shipping_address",
-                "payer_address",
+                "payer_id",
                 "token",
             ],
         },
@@ -117,32 +112,20 @@ def get_catalog(
 
 def pay_vendor(
     vendor_url: str,
-    recipient_address: str,
     amount: str,
-    payer_address: str,
+    payer_id: str,
     http_client: httpx.Client | None = None,
 ) -> dict:
     """
     Pay the vendor and return a session token.
-
-    Real mode (SEPOLIA_RPC_URL + AGENT_PRIVATE_KEY both set):
-      signs and broadcasts a USDC transfer, submits the real tx_hash.
-    Mock mode (default):
-      generates a deterministic mock tx_hash — no blockchain interaction.
+    Currently uses mock payments. Production: will use Stripe.
     """
-    rpc_url = os.getenv("SEPOLIA_RPC_URL")
-    private_key = os.getenv("AGENT_PRIVATE_KEY")
-
-    if rpc_url and private_key:
-        from .wallet import send_usdc
-        tx_hash = send_usdc(recipient_address, amount, private_key, rpc_url)
-    else:
-        tx_hash = f"0xmocktx-{uuid.uuid4().hex[:16]}"
+    payment_id = f"pay-{uuid.uuid4().hex[:16]}"
 
     client = http_client or httpx.Client()
     resp = client.post(
         f"{vendor_url}/pay",
-        json={"tx_hash": tx_hash, "amount": amount, "payer_address": payer_address},
+        json={"payment_id": payment_id, "amount": amount, "payer_id": payer_id},
     )
     resp.raise_for_status()
     return resp.json()
@@ -153,7 +136,7 @@ def buy_product(
     product_id: str,
     quantity: int,
     shipping_address: str,
-    payer_address: str,
+    payer_id: str,
     token: str,
     http_client: httpx.Client | None = None,
 ) -> dict:
@@ -164,7 +147,7 @@ def buy_product(
             "product_id": product_id,
             "quantity": quantity,
             "shipping_address": shipping_address,
-            "payer_address": payer_address,
+            "payer_id": payer_id,
         },
         headers={"Authorization": f"Bearer {token}"},
     )
@@ -180,9 +163,8 @@ def dispatch_tool(name: str, inputs: dict, http_client: httpx.Client) -> str:
         elif name == "pay_vendor":
             result = pay_vendor(
                 inputs["vendor_url"],
-                inputs["recipient_address"],
                 inputs["amount"],
-                inputs["payer_address"],
+                inputs["payer_id"],
                 http_client,
             )
         elif name == "buy_product":
@@ -191,7 +173,7 @@ def dispatch_tool(name: str, inputs: dict, http_client: httpx.Client) -> str:
                 inputs["product_id"],
                 inputs["quantity"],
                 inputs["shipping_address"],
-                inputs["payer_address"],
+                inputs["payer_id"],
                 inputs["token"],
                 http_client,
             )

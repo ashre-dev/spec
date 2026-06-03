@@ -3,26 +3,23 @@ from typing import Optional
 
 
 class PaymentDetails(BaseModel):
-    protocol: str = "x402"
-    address: str
-    currency: str = "USDC"
-    network: str = "base-sepolia"
+    protocol: str = "stripe"
+    currency: str = "USD"
     price_per_query: str
-    amount: str  # same as price_per_query, included for x402 compatibility
+    amount: str  # same as price_per_query, included for compatibility
 
 
-class X402Challenge(BaseModel):
+class PaymentChallenge(BaseModel):
     """HTTP 402 response body — tells the agent what/where/how to pay."""
-    x402_version: int = 1
     error: str = "Payment Required"
     accepts: list[PaymentDetails]
 
 
 class PayRequest(BaseModel):
     """Agent submits this to POST /pay to get a session token."""
-    tx_hash: str          # mock transaction hash
-    amount: str           # USDC amount paid, e.g. "0.05"
-    payer_address: str    # agent wallet address
+    payment_id: str       # payment reference (e.g. Stripe payment intent ID)
+    amount: str           # amount paid, e.g. "0.05"
+    payer_id: str         # agent or buyer identifier
 
 
 class PayResponse(BaseModel):
@@ -34,7 +31,7 @@ class Product(BaseModel):
     id: str
     name: str
     description: str
-    price_usdc: str
+    price: str
     category: str
     in_stock: bool = True
     ships_to: list[str]
@@ -63,7 +60,7 @@ class BuyRequest(BaseModel):
     product_id: str
     quantity: int = 1
     shipping_address: str
-    payer_address: str
+    payer_id: str
     reservation_id: Optional[str] = None
     callback_url: Optional[str] = None
 
@@ -72,7 +69,7 @@ class BuyResponse(BaseModel):
     order_id: str
     product_id: str
     quantity: int
-    total_usdc: str
+    total: str
     status: str = "confirmed"
     estimated_delivery: str
     message: Optional[str] = None

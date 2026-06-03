@@ -51,17 +51,13 @@ def vendor_client() -> httpx.Client:
     )
 
 
-HELSINKI_WALLET = "0xABCD1234ABCD1234ABCD1234ABCD1234ABCD1234"
-
-
 @pytest.fixture
 def auth_token(vendor_client) -> str:
     """Pay the vendor and return a fresh session token."""
     result = pay_vendor(
         "http://testserver",
-        recipient_address=HELSINKI_WALLET,
         amount="0.05",
-        payer_address="0xAgent",
+        payer_id="test-agent",
         http_client=vendor_client,
     )
     return result["token"]
@@ -75,8 +71,7 @@ def test_get_catalog_without_token_returns_402(vendor_client):
     result = get_catalog("http://testserver", http_client=vendor_client)
     assert result["status"] == 402
     pr = result["payment_required"]
-    assert pr["x402_version"] == 1
-    assert pr["accepts"][0]["currency"] == "USDC"
+    assert pr["accepts"][0]["currency"] == "USD"
 
 
 def test_get_catalog_with_valid_token_returns_catalog(vendor_client, auth_token):
@@ -94,9 +89,8 @@ def test_get_catalog_with_valid_token_returns_catalog(vendor_client, auth_token)
 def test_pay_vendor_success(vendor_client):
     result = pay_vendor(
         "http://testserver",
-        recipient_address=HELSINKI_WALLET,
         amount="0.05",
-        payer_address="0xSomeAgent",
+        payer_id="test-agent",
         http_client=vendor_client,
     )
     assert "token" in result
@@ -107,9 +101,8 @@ def test_pay_vendor_insufficient_amount_raises(vendor_client):
     with pytest.raises(httpx.HTTPStatusError):
         pay_vendor(
             "http://testserver",
-            recipient_address=HELSINKI_WALLET,
             amount="0.01",  # too low
-            payer_address="0xAgent",
+            payer_id="test-agent",
             http_client=vendor_client,
         )
 
@@ -124,7 +117,7 @@ def test_buy_product_success(vendor_client, auth_token):
         product_id="hms-tee-001",
         quantity=1,
         shipping_address="Mannerheimintie 1, Helsinki",
-        payer_address="0xAgent",
+        payer_id="test-agent",
         token=auth_token,
         http_client=vendor_client,
     )
@@ -140,7 +133,7 @@ def test_buy_product_out_of_stock_raises(vendor_client, auth_token):
             product_id="hms-mug-001",  # in_stock=False
             quantity=1,
             shipping_address="somewhere",
-            payer_address="0xAgent",
+            payer_id="test-agent",
             token=auth_token,
             http_client=vendor_client,
         )
@@ -210,17 +203,15 @@ def test_agent_full_flow(vendor_client):
 
         # Turn 2: tool result is the 402 → Claude pays
         if len(messages) == 3:
-            # Extract price and recipient from the tool result
+            # Extract price from the tool result
             tr_content = json.loads(messages[2]["content"][0]["content"])
             accepts = tr_content["payment_required"]["accepts"][0]
             amount = accepts["price_per_query"]
-            recipient = accepts["address"]
             return _make_response("tool_use", [
                 _make_tool_use_block("tu2", "pay_vendor", {
                     "vendor_url": "http://testserver",
-                    "recipient_address": recipient,
                     "amount": amount,
-                    "payer_address": "0xAgentWallet",
+                    "payer_id": "test-agent",
                 })
             ])
 
@@ -244,14 +235,14 @@ def test_agent_full_flow(vendor_client):
                     "product_id": "hms-tee-001",
                     "quantity": 1,
                     "shipping_address": "123 Agent Street, Helsinki, FI",
-                    "payer_address": "0xAgentWallet",
+                    "payer_id": "test-agent",
                     "token": token,
                 })
             ])
 
         # Turn 5: purchase confirmed → Claude summarises
         return _make_response("end_turn", [
-            _make_text_block("Purchased Helsinki Maker Tee × 1 for 18.00 USDC. Order confirmed.")
+            _make_text_block("Purchased Helsinki Maker Tee × 1 for $18.00. Order confirmed.")
         ])
 
     mock_anthropic = MagicMock()

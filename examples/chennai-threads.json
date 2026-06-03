@@ -5,11 +5,10 @@
   "category": ["clothing", "accessories"],
   "mcp_endpoint": "https://api.chennaithreads.in/mcp",
   "payment": {
-    "protocol": "x402",
-    "address": "0xCHENNAI0000THREADS0000WALLET000000000001",
-    "currency": "USDC",
-    "network": "base",
-    "price_per_query": "0.02"
+    "protocol": "upi",
+    "upi_id": "chennaithreads@upi",
+    "currency": "INR",
+    "price_per_query": "2.00"
   },
   "ships_to": ["IN", "LK", "SG", "MY", "AE"],
   "verified": false,

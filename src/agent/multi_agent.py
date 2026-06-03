@@ -12,7 +12,7 @@ import json
 import anthropic
 import httpx
 
-AGENT_WALLET = "0xAgentWallet0000000000000000000000000000"
+AGENT_ID = "ashre-agent-default"
 
 SYSTEM_PROMPT = f"""\
 You are an AI shopping agent operating on the ASHRE protocol.
@@ -56,9 +56,9 @@ async def _fetch_vendor_catalog(
         pay_resp = await http.post(
             f"{vendor_url}/pay",
             json={
-                "tx_hash": f"0xmocktx-{vendor_url[-4:]}",
+                "payment_id": f"pay-{vendor_url[-4:]}",
                 "amount": amount,
-                "payer_address": AGENT_WALLET,
+                "payer_id": AGENT_ID,
             },
         )
         pay_resp.raise_for_status()
@@ -94,7 +94,7 @@ async def _buy_from_vendor(
             "product_id": product_id,
             "quantity": quantity,
             "shipping_address": shipping_address,
-            "payer_address": AGENT_WALLET,
+            "payer_id": AGENT_ID,
         },
         headers={"Authorization": f"Bearer {token}"},
     )

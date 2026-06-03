@@ -5,10 +5,9 @@
   "category": ["electronics", "tools", "components", "clothing"],
   "mcp_endpoint": "https://api.berlinhackerspace.de/mcp",
   "payment": {
-    "protocol": "x402",
-    "address": "0x1234ABCD1234ABCD1234ABCD1234ABCD1234ABCD",
-    "currency": "USDC",
-    "network": "base",
+    "protocol": "stripe",
+    "stripe_account_id": "acct_berlin_hacker_space",
+    "currency": "EUR",
     "price_per_query": "0.03"
   },
   "ships_to": ["DE", "AT", "CH", "NL", "BE", "FR", "PL", "CZ"],

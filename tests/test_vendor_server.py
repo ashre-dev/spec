@@ -12,9 +12,9 @@ chennai_client = TestClient(chennai_app)
 
 def _get_token() -> str:
     resp = client.post("/pay", json={
-        "tx_hash": "0xdeadbeef",
+        "payment_id": "pay-test-001",
         "amount": "0.05",
-        "payer_address": "0xAgentWallet",
+        "payer_id": "test-agent",
     })
     assert resp.status_code == 200
     return resp.json()["token"]
@@ -26,10 +26,9 @@ def test_catalog_without_token_returns_402():
     resp = client.get("/catalog")
     assert resp.status_code == 402
     body = resp.json()
-    assert body["x402_version"] == 1
     assert body["error"] == "Payment Required"
     assert len(body["accepts"]) == 1
-    assert body["accepts"][0]["currency"] == "USDC"
+    assert body["accepts"][0]["currency"] == "USD"
 
 
 def test_catalog_with_invalid_token_returns_402():
@@ -46,16 +45,16 @@ def test_catalog_with_valid_token_returns_products():
     assert len(body["products"]) > 0
     product = body["products"][0]
     assert "id" in product
-    assert "price_usdc" in product
+    assert "price" in product
 
 
 # --- /pay ---
 
-def test_pay_with_valid_tx_issues_token():
+def test_pay_with_valid_payment_issues_token():
     resp = client.post("/pay", json={
-        "tx_hash": "0xabc123",
+        "payment_id": "pay-abc123",
         "amount": "0.05",
-        "payer_address": "0xSomeAgent",
+        "payer_id": "test-agent",
     })
     assert resp.status_code == 200
     body = resp.json()
@@ -63,20 +62,20 @@ def test_pay_with_valid_tx_issues_token():
     assert body["expires_in"] == 3600
 
 
-def test_pay_with_empty_tx_hash_rejected():
+def test_pay_with_empty_payment_id_rejected():
     resp = client.post("/pay", json={
-        "tx_hash": "",
+        "payment_id": "",
         "amount": "0.05",
-        "payer_address": "0xSomeAgent",
+        "payer_id": "test-agent",
     })
     assert resp.status_code == 400
 
 
 def test_pay_with_insufficient_amount_rejected():
     resp = client.post("/pay", json={
-        "tx_hash": "0xabc123",
+        "payment_id": "pay-abc123",
         "amount": "0.01",
-        "payer_address": "0xSomeAgent",
+        "payer_id": "test-agent",
     })
     assert resp.status_code == 400
 
@@ -88,7 +87,7 @@ def test_buy_without_token_returns_402():
         "product_id": "hms-tee-001",
         "quantity": 1,
         "shipping_address": "Mannerheimintie 1, Helsinki",
-        "payer_address": "0xAgent",
+        "payer_id": "test-agent",
     })
     assert resp.status_code == 402
 
@@ -101,7 +100,7 @@ def test_buy_valid_product():
             "product_id": "hms-tee-001",
             "quantity": 2,
             "shipping_address": "Mannerheimintie 1, Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
         },
         headers={"Authorization": f"Bearer {token}"},
     )
@@ -109,7 +108,7 @@ def test_buy_valid_product():
     body = resp.json()
     assert body["product_id"] == "hms-tee-001"
     assert body["quantity"] == 2
-    assert body["total_usdc"] == "36.00"
+    assert body["total"] == "36.00"
     assert body["status"] == "confirmed"
     assert "order_id" in body
 
@@ -122,7 +121,7 @@ def test_buy_nonexistent_product_returns_404():
             "product_id": "does-not-exist",
             "quantity": 1,
             "shipping_address": "somewhere",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
         },
         headers={"Authorization": f"Bearer {token}"},
     )
@@ -137,7 +136,7 @@ def test_buy_out_of_stock_returns_409():
             "product_id": "hms-mug-001",  # in_stock=False
             "quantity": 1,
             "shipping_address": "somewhere",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
         },
         headers={"Authorization": f"Bearer {token}"},
     )
@@ -148,9 +147,9 @@ def test_buy_out_of_stock_returns_409():
 
 def _get_chennai_token() -> str:
     resp = chennai_client.post("/pay", json={
-        "tx_hash": "0xchennai",
+        "payment_id": "pay-chennai-001",
         "amount": "0.02",
-        "payer_address": "0xAgentWallet",
+        "payer_id": "test-agent",
     })
     assert resp.status_code == 200
     return resp.json()["token"]
@@ -172,7 +171,7 @@ def test_chennai_has_blue_tee():
     products = resp.json()["products"]
     blue_tee = [p for p in products if p["id"] == "ct-tee-blue-001"]
     assert len(blue_tee) == 1
-    assert blue_tee[0]["price_usdc"] == "25.00"
+    assert blue_tee[0]["price"] == "25.00"
     assert "IN" in blue_tee[0]["ships_to"]
 
 
@@ -184,7 +183,7 @@ def test_chennai_out_of_stock_tote():
             "product_id": "ct-tote-001",
             "quantity": 1,
             "shipping_address": "T Nagar, Chennai",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
         },
         headers={"Authorization": f"Bearer {token}"},
     )
@@ -256,7 +255,7 @@ def test_buy_with_valid_reservation():
             "product_id": "hms-tee-001",
             "quantity": 2,
             "shipping_address": "Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
             "reservation_id": reservation_id,
         },
         headers={"Authorization": f"Bearer {token}"},
@@ -273,7 +272,7 @@ def test_buy_with_invalid_reservation_returns_410():
             "product_id": "hms-tee-001",
             "quantity": 1,
             "shipping_address": "Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
             "reservation_id": "bogus-reservation-id",
         },
         headers={"Authorization": f"Bearer {token}"},
@@ -298,7 +297,7 @@ def test_buy_with_mismatched_reservation_returns_410():
             "product_id": "hms-hoodie-001",
             "quantity": 1,
             "shipping_address": "Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
             "reservation_id": reservation_id,
         },
         headers={"Authorization": f"Bearer {token}"},
@@ -322,7 +321,7 @@ def test_reservation_consumed_after_buy():
             "product_id": "hms-tee-001",
             "quantity": 1,
             "shipping_address": "Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
             "reservation_id": reservation_id,
         },
         headers={"Authorization": f"Bearer {token}"},
@@ -336,7 +335,7 @@ def test_reservation_consumed_after_buy():
             "product_id": "hms-tee-001",
             "quantity": 1,
             "shipping_address": "Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
             "reservation_id": reservation_id,
         },
         headers={"Authorization": f"Bearer {token}"},
@@ -354,7 +353,7 @@ def test_buy_without_reservation_still_works():
             "product_id": "hms-tee-001",
             "quantity": 1,
             "shipping_address": "Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
         },
         headers={"Authorization": f"Bearer {token}"},
     )
@@ -372,7 +371,7 @@ def test_buy_with_callback_url_returns_url_in_response():
             "product_id": "hms-tee-001",
             "quantity": 1,
             "shipping_address": "Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
             "callback_url": "https://agent.example.com/order-updates",
         },
         headers={"Authorization": f"Bearer {token}"},
@@ -389,7 +388,7 @@ def test_buy_without_callback_url_returns_null():
             "product_id": "hms-tee-001",
             "quantity": 1,
             "shipping_address": "Helsinki",
-            "payer_address": "0xAgent",
+            "payer_id": "test-agent",
         },
         headers={"Authorization": f"Bearer {token}"},
     )

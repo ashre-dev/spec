@@ -40,30 +40,29 @@
     },
     "payment": {
       "type": "object",
-      "required": ["protocol", "address", "currency", "network", "price_per_query"],
+      "required": ["protocol", "currency", "price_per_query"],
       "properties": {
         "protocol": {
           "type": "string",
-          "enum": ["x402"],
-          "description": "Payment protocol"
-        },
-        "address": {
-          "type": "string",
-          "description": "Vendor wallet address"
+          "enum": ["stripe", "upi", "bank_transfer"],
+          "description": "Payment provider or method"
         },
         "currency": {
           "type": "string",
-          "enum": ["USDC"],
-          "description": "Payment currency"
+          "enum": ["USD", "EUR", "INR", "GBP"],
+          "description": "Payment currency (ISO 4217)"
         },
-        "network": {
+        "stripe_account_id": {
           "type": "string",
-          "enum": ["base", "base-sepolia"],
-          "description": "Blockchain network"
+          "description": "Vendor's Stripe Connect account ID (required if protocol is stripe)"
+        },
+        "upi_id": {
+          "type": "string",
+          "description": "Vendor's UPI ID (required if protocol is upi)"
         },
         "price_per_query": {
           "type": "string",
-          "description": "Cost per catalog query in USDC",
+          "description": "Cost per catalog query in the specified currency",
           "example": "0.05"
         }
       }

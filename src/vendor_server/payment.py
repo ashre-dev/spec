@@ -1,8 +1,8 @@
 """
-x402 payment handling.
+Payment handling.
 
-Mock mode (default): accepts any non-empty tx_hash with the correct amount.
-Real mode (set SEPOLIA_RPC_URL env var): verifies the USDC transfer on Base Sepolia.
+Mock mode (default): accepts any non-empty payment_id with the correct amount.
+Production mode: will integrate with Stripe Connect for real payment verification.
 """
 
 import os
@@ -11,7 +11,7 @@ import time
 import uuid
 from datetime import datetime, timezone, timedelta
 
-# token -> {expires_at, payer_address}
+# token -> {expires_at, payer_id}
 _active_tokens: dict[str, dict] = {}
 
 TOKEN_TTL = 3600  # seconds
@@ -22,11 +22,11 @@ _reservations: dict[str, dict] = {}
 RESERVATION_TTL = 300  # 5 minutes
 
 
-def issue_token(payer_address: str) -> tuple[str, int]:
+def issue_token(payer_id: str) -> tuple[str, int]:
     token = secrets.token_urlsafe(32)
     _active_tokens[token] = {
         "expires_at": time.time() + TOKEN_TTL,
-        "payer_address": payer_address,
+        "payer_id": payer_id,
     }
     return token, TOKEN_TTL
 
@@ -70,9 +70,9 @@ def consume_reservation(reservation_id: str) -> None:
     _reservations.pop(reservation_id, None)
 
 
-def mock_verify_payment(tx_hash: str, amount: str, expected_amount: str) -> bool:
-    """Stub — accepts any non-empty tx_hash with correct amount."""
-    if not tx_hash:
+def mock_verify_payment(payment_id: str, amount: str, expected_amount: str) -> bool:
+    """Stub — accepts any non-empty payment_id with correct amount."""
+    if not payment_id:
         return False
     try:
         paid = float(amount)
@@ -83,19 +83,12 @@ def mock_verify_payment(tx_hash: str, amount: str, expected_amount: str) -> bool
 
 
 def verify_payment(
-    tx_hash: str,
+    payment_id: str,
     amount: str,
     expected_amount: str,
-    recipient: str | None = None,
 ) -> bool:
     """
-    Route to on-chain or mock verification based on env configuration.
-
-    Real mode: SEPOLIA_RPC_URL must be set and `recipient` must be provided.
-    Mock mode: falls back to mock_verify_payment (used in dev and tests).
+    Verify a payment. Currently uses mock verification.
+    Production: will verify via Stripe API.
     """
-    rpc_url = os.getenv("SEPOLIA_RPC_URL")
-    if rpc_url and recipient:
-        from .x402_verifier import verify_usdc_payment
-        return verify_usdc_payment(tx_hash, recipient, expected_amount, rpc_url)
-    return mock_verify_payment(tx_hash, amount, expected_amount)
+    return mock_verify_payment(payment_id, amount, expected_amount)

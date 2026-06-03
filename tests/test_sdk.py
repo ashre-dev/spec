@@ -65,7 +65,7 @@ class TestVendorAppSDK:
         p = va.products[0]
         assert p.id
         assert p.name
-        assert p.price_usdc
+        assert p.price
 
     def test_get_product_found(self):
         va = VendorApp("helsinki-maker-store")
@@ -110,10 +110,9 @@ HELSINKI_MANIFEST = {
     "category": ["clothing", "accessories"],
     "mcp_endpoint": "https://api.helsinkimakerstore.fi/mcp",
     "payment": {
-        "protocol": "x402",
-        "address": "0xABCD1234ABCD1234ABCD1234ABCD1234ABCD1234",
-        "currency": "USDC",
-        "network": "base-sepolia",
+        "protocol": "stripe",
+        "currency": "EUR",
+        "stripe_account_id": "acct_helsinki_maker_store",
         "price_per_query": "0.05",
     },
     "ships_to": ["FI", "SE", "DE"],
@@ -128,10 +127,9 @@ BERLIN_MANIFEST = {
     "category": ["electronics", "tools"],
     "mcp_endpoint": "https://api.berlinhackerspace.de/mcp",
     "payment": {
-        "protocol": "x402",
-        "address": "0x1234ABCD1234ABCD1234ABCD1234ABCD1234ABCD",
-        "currency": "USDC",
-        "network": "base-sepolia",
+        "protocol": "stripe",
+        "currency": "EUR",
+        "stripe_account_id": "acct_berlin_hacker_space",
         "price_per_query": "0.03",
     },
     "ships_to": ["DE", "AT", "CH"],
@@ -309,7 +307,7 @@ class TestAshreAgentSDK:
 
         agent = AshreAgent.__new__(AshreAgent)
         agent._client = mock_anthropic
-        agent._payer_address = "0xAgentWallet0000000000000000000000000000"
+        agent._payer_id = "ashre-agent-default"
 
         result = agent.shop(
             "I need a warm hoodie",
@@ -328,7 +326,7 @@ class TestAshreAgentSDK:
 
         agent = AshreAgent.__new__(AshreAgent)
         agent._client = mock_anthropic
-        agent._payer_address = "0xAgentWallet0000000000000000000000000000"
+        agent._payer_id = "ashre-agent-default"
 
         result = agent.shop(
             "I need a hoodie",
@@ -363,7 +361,7 @@ class TestAshreAgentSDK:
 
         agent = AshreAgent.__new__(AshreAgent)
         agent._client = MagicMock()
-        agent._payer_address = "0xAgent"
+        agent._payer_id = "test-agent"
 
         import asyncio as _asyncio
         with patch("sdk.agent.run_multi_agent") as mock_rma, \
@@ -383,7 +381,7 @@ class TestAshreAgentSDK:
         """shop_multi() returns success=False when run_multi_agent raises."""
         agent = AshreAgent.__new__(AshreAgent)
         agent._client = MagicMock()
-        agent._payer_address = "0xAgent"
+        agent._payer_id = "test-agent"
 
         with patch("sdk.agent.asyncio") as mock_asyncio:
             mock_asyncio.run.side_effect = RuntimeError("network error")
