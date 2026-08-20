@@ -162,8 +162,8 @@
 
             <!-- ─── 6 · reserve ─── -->
             <text class="yel wire" data-s="6" x="480" y="338">POST /reserve → held 5 min</text>
-            <path class="ink draw" data-s="6" d="M480 352 L480 382"/>
-            <path class="ink draw head" data-s="6" d="M473 374 L480 388 L488 377"/>
+            <path class="ink draw" data-s="7" d="M480 352 L480 382"/>
+            <path class="ink draw head" data-s="7" d="M473 374 L480 388 L488 377"/>
 
             <!-- ─── 7 · the human gate ─── -->
             <rect class="grn draw thick" data-s="7" x="160" y="392" width="640" height="86" rx="8"/>
@@ -295,7 +295,7 @@
       <div class="who-card">
         <h3>Trust</h3>
         <p>Every listing is a manifest against a published schema, carrying a <code>verified</code> flag agents can filter on. Endpoints are health-probed, so dead vendors don't reach buyers.</p>
-        <code>GET /vendors/{id}/health</code>
+        <code>GET /vendors/{vendor_id}/health</code>
       </div>
       <div class="who-card">
         <h3>Payment handshake</h3>
@@ -312,9 +312,6 @@
     <div class="eyebrow">the-whole-api</div>
     <h2 class="md-h">Seven endpoints. That's the entire protocol.</h2>
     <hr class="md-hr" style="margin: 20px 0 28px;" />
-    <p class="md-p" style="margin-bottom: 32px;">
-      Small enough to read in one sitting, and to implement in an afternoon.
-    </p>
 
     <div class="table-scroll">
       <table class="proto">
@@ -332,7 +329,7 @@
           </tr>
           <tr>
             <td class="verb get">GET</td>
-            <td class="path">/vendors/{id}/health</td>
+            <td class="path">/vendors/{vendor_id}/health</td>
             <td>Probe a vendor's MCP endpoint. <code>404</code> if the vendor isn't registered.</td>
           </tr>
         </tbody>

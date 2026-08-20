@@ -63,6 +63,10 @@ button, input, select, textarea, optgroup {
 /* ── Base ── */
 html { scroll-behavior: smooth; }
 
+/* The nav is sticky, so anchor jumps (#flow from "Watch how it works", and every
+   nav link) would otherwise land the heading underneath it. */
+section[id], div[id], .board-frame { scroll-margin-top: 88px; }
+
 body {
   font-family: var(--sans);
   font-size: 18px;
@@ -190,7 +194,6 @@ nav {
   padding-right: 12px;
   transition: background 0.2s;
 }
-.problem .md-hr::before { background: var(--surface); }
 
 /* Prose */
 .md-p {
